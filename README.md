@@ -1,333 +1,265 @@
-# 🎵 Orpheus Backend - Decentralized Music Collaboration Studio
+# 🎵 Orpheus Song Forge - Decentralized Music Collaboration Platform
 
-A Rust-based backend for Orpheus, a decentralized music collaboration platform powered by ICP (Internet Computer Protocol) blockchain authentication.
+A full-stack decentralized music collaboration platform powered by ICP (Internet Computer Protocol) blockchain authentication, featuring a React frontend and Rust backend.
 
-## 🚀 Features
+## 🚀 Overview
 
-- **Project Management**: Create and manage music collaboration projects
-- **Contributor Management**: Track contributors and their revenue splits
-- **File Upload**: Upload MP3 files for collaboration
-- **ICP Authentication**: Blockchain-powered authentication using ICP principals
-- **Persistent Storage**: In-memory storage with JSON file persistence
-- **RESTful API**: Clean REST endpoints for frontend integration
+**Orpheus Song Forge** enables musicians to collaborate seamlessly on projects with:
+- **Blockchain Authentication** via ICP principals
+- **Smart Revenue Splitting** with automatic validation
+- **File Collaboration** with MP3 upload and sharing
+- **Project Management** with contributor tracking
+- **Real-time Collaboration** interface
 
-## 📋 API Endpoints
+## 🏗️ Architecture
 
-### Public Endpoints
-
-#### Health Check
 ```
-GET /health
-```
-Returns server health status.
-
-#### Get Test Token (Development)
-```
-GET /auth/token
-```
-Returns a test ICP authentication token for development purposes.
-
-### Protected Endpoints (Require ICP Authentication)
-
-All protected endpoints require an `Authorization: Bearer <token>` header with a valid ICP token.
-
-#### Create Project
-```
-POST /api/projects
-Content-Type: application/json
-
-{
-  "project_name": "My Awesome Track",
-  "contributors": [
-    {
-      "name": "Alice Producer",
-      "wallet_address": "rdmx6-jaaaa-aaaah-qcaiq-cai",
-      "email": "alice@example.com"
-    },
-    {
-      "name": "Bob Vocalist", 
-      "wallet_address": "rrkah-fqaaa-aaaah-qcaiq-cai",
-      "email": "bob@example.com"
-    }
-  ],
-  "splits": [
-    {
-      "contributor_name": "Alice Producer",
-      "percentage": 60.0
-    },
-    {
-      "contributor_name": "Bob Vocalist",
-      "percentage": 40.0
-    }
-  ]
-}
+orpheus-song-forge/
+├── 📱 Frontend (React + TypeScript)
+│   ├── src/components/          # React components
+│   ├── src/pages/              # Application pages  
+│   └── src/integrations/       # Supabase & external APIs
+│
+├── 🦀 Backend (Rust + Axum)
+│   ├── src/handlers.rs         # API request handlers
+│   ├── src/models.rs           # Data structures
+│   ├── src/auth.rs             # ICP authentication
+│   └── src/storage.rs          # Persistent storage
+│
+└── 🐳 Infrastructure
+    ├── Dockerfile              # Container configuration
+    └── docker-compose.yml      # Multi-service setup
 ```
 
-Response:
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "message": "Project created successfully"
-}
+---
+
+# 📱 Frontend (React)
+
+Built with modern web technologies for an optimal user experience.
+
+## 🛠️ Frontend Tech Stack
+- **React** with TypeScript
+- **Vite** for fast development
+- **Tailwind CSS** for styling
+- **shadcn/ui** for component library
+- **Supabase** for additional data persistence
+
+## 🚀 Frontend Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
 ```
 
-#### Get All Projects
-```
-GET /api/projects
-```
+The frontend will be available at `http://localhost:5173`
 
-Response:
-```json
-{
-  "projects": [
-    {
-      "id": "550e8400-e29b-41d4-a716-446655440000",
-      "project_name": "My Awesome Track",
-      "contributors_count": 2,
-      "created_at": "2024-01-15T10:30:00Z"
-    }
-  ],
-  "total": 1
-}
-```
+## 📋 Frontend Features
+- ✅ **Artist Profiles** - Manage your musical identity
+- ✅ **Collaboration Rooms** - Real-time project workspaces  
+- ✅ **Project Dashboard** - Track all your collaborations
+- ✅ **File Sharing** - Upload and share audio files
+- ✅ **Revenue Management** - Configure profit splits
 
-#### Get Project by ID
-```
-GET /api/projects/{id}
-```
+---
 
-Response:
-```json
-{
-  "id": "550e8400-e29b-41d4-a716-446655440000",
-  "project_name": "My Awesome Track",
-  "contributors": [
-    {
-      "name": "Alice Producer",
-      "wallet_address": "rdmx6-jaaaa-aaaah-qcaiq-cai",
-      "email": "alice@example.com"
-    }
-  ],
-  "splits": [
-    {
-      "contributor_name": "Alice Producer",
-      "percentage": 60.0
-    }
-  ],
-  "created_at": "2024-01-15T10:30:00Z",
-  "updated_at": "2024-01-15T10:30:00Z",
-  "audio_files": []
-}
-```
+# 🦀 Backend (Rust)
 
-#### Upload MP3 File
-```
-POST /api/upload
-Content-Type: multipart/form-data
+High-performance backend API built with Rust and Axum framework.
 
-Form data:
-- file: <MP3 file>
-```
+## 🛠️ Backend Tech Stack
+- **Rust** with Axum web framework
+- **Tokio** for async runtime
+- **Serde** for JSON serialization
+- **ICP Integration** for blockchain auth
+- **File Upload** with validation
 
-Response:
-```json
-{
-  "file_path": "uploads/550e8400-e29b-41d4-a716-446655440000_track.mp3",
-  "message": "File uploaded successfully"
-}
-```
-
-### Static File Serving
-
-Uploaded files are served at:
-```
-GET /uploads/{filename}
-```
-
-## 🔐 Authentication
-
-The backend uses ICP (Internet Computer Protocol) blockchain authentication. For the hackathon MVP, we use a simplified token format:
-
-1. **Token Format**: Base64-encoded JSON containing:
-   ```json
-   {
-     "principal": "rdmx6-jaaaa-aaaah-qcaiq-cai",
-     "exp": 1642234800,
-     "iat": 1642231200
-   }
-   ```
-
-2. **Usage**: Include in request headers:
-   ```
-   Authorization: Bearer <base64-encoded-token>
-   ```
-
-3. **Development**: Use `GET /auth/token` to get a test token.
-
-## 🛠️ Setup & Installation
+## 🚀 Backend Setup
 
 ### Prerequisites
-
-- Rust (latest stable version)
-- Cargo package manager
+- Rust (latest stable)
+- Visual Studio Build Tools (Windows)
 
 ### Installation Steps
 
-1. **Clone/Navigate to the project**:
+1. **Navigate to project**:
    ```bash
-   cd rust-backend
+   cd orpheus-song-forge
    ```
 
-2. **Install dependencies**:
+2. **Install Rust dependencies**:
    ```bash
    cargo build
    ```
 
-3. **Create environment file** (optional):
+3. **Set up environment**:
    ```bash
-   # Create .env file
-   echo "PORT=3000" > .env
-   echo "STORAGE_FILE=data/projects.json" >> .env
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
 
 4. **Run the server**:
    ```bash
    cargo run
+   # OR use the convenience script:
+   ./run.bat
    ```
 
-The server will start on `http://0.0.0.0:3000` by default.
+The backend will be available at `http://localhost:3000`
 
-## 📁 Project Structure
+## 📋 API Endpoints
 
-```
-src/
-├── main.rs          # Server setup and routing
-├── models.rs        # Data structures and models
-├── storage.rs       # In-memory storage with JSON persistence
-├── handlers.rs      # API request handlers
-└── auth.rs          # ICP authentication middleware
+### Public Endpoints
+- `GET /health` - Health check
+- `GET /auth/token` - Get test ICP token (development)
 
-data/
-└── projects.json    # Persistent storage file
+### Protected Endpoints (Require ICP Auth)
+- `POST /api/projects` - Create new collaboration project
+- `GET /api/projects` - List all projects
+- `GET /api/projects/:id` - Get project details
+- `POST /api/upload` - Upload MP3 files
 
-uploads/
-└── (uploaded MP3 files)
-```
+### Example API Usage
 
-## 🧪 Testing the API
-
-### 1. Get a test token:
+**1. Get Authentication Token**
 ```bash
 curl http://localhost:3000/auth/token
 ```
 
-### 2. Create a project:
+**2. Create a Project**
 ```bash
 curl -X POST http://localhost:3000/api/projects \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <your-token>" \
+  -H "Authorization: Bearer <token>" \
   -d '{
     "project_name": "Epic Collaboration",
     "contributors": [
       {
-        "name": "Alice",
-        "wallet_address": "alice-principal-id",
+        "name": "Alice Producer",
+        "wallet_address": "alice-icp-principal",
         "email": "alice@music.com"
-      },
-      {
-        "name": "Bob", 
-        "wallet_address": "bob-principal-id",
-        "email": "bob@music.com"
       }
     ],
     "splits": [
       {
-        "contributor_name": "Alice",
-        "percentage": 70.0
-      },
-      {
-        "contributor_name": "Bob",
-        "percentage": 30.0
+        "contributor_name": "Alice Producer", 
+        "percentage": 100.0
       }
     ]
   }'
 ```
 
-### 3. Get all projects:
-```bash
-curl http://localhost:3000/api/projects \
-  -H "Authorization: Bearer <your-token>"
-```
-
-### 4. Upload an MP3 file:
+**3. Upload Audio File**
 ```bash
 curl -X POST http://localhost:3000/api/upload \
-  -H "Authorization: Bearer <your-token>" \
-  -F "file=@path/to/your/track.mp3"
+  -H "Authorization: Bearer <token>" \
+  -F "file=@track.mp3"
 ```
-
-## 🔧 Configuration
-
-### Environment Variables
-
-- `PORT`: Server port (default: 3000)
-- `STORAGE_FILE`: Path to JSON storage file (default: data/projects.json)
-
-### Storage
-
-The backend uses a hybrid storage approach:
-- **In-memory**: Fast read/write operations during runtime
-- **JSON persistence**: Automatic saves to file for data persistence between restarts
-
-## 🚨 Error Handling
-
-All errors return JSON in this format:
-```json
-{
-  "error": "error_code",
-  "message": "Human-readable error message"
-}
-```
-
-Common error codes:
-- `validation_error`: Invalid request data
-- `unauthorized`: Authentication failure
-- `not_found`: Resource not found
-- `storage_error`: Storage operation failure
-- `upload_error`: File upload failure
-
-## 🎯 Hackathon MVP Notes
-
-This is a hackathon MVP implementation with the following simplifications:
-
-1. **Authentication**: Simplified ICP token verification (production would use proper cryptographic verification)
-2. **Storage**: JSON file persistence (production would use a proper database)
-3. **File Storage**: Local filesystem (production would use cloud storage)
-4. **Validation**: Basic validation (production would have more comprehensive checks)
-
-## 🔄 Development
-
-### Running in Development Mode
-
-```bash
-# With debug logging
-RUST_LOG=debug cargo run
-
-# With auto-reload (install cargo-watch first)
-cargo install cargo-watch
-cargo watch -x run
-```
-
-### Building for Production
-
-```bash
-cargo build --release
-```
-
-## 📝 License
-
-MIT License - Perfect for hackathon projects!
 
 ---
 
-**Built with ❤️ for music collaboration on the blockchain** 🎶⛓️
+# 🔐 ICP Blockchain Authentication
+
+## Token Format
+For this hackathon MVP, we use simplified ICP tokens:
+
+```json
+{
+  "principal": "rdmx6-jaaaa-aaaah-qcaiq-cai",
+  "exp": 1642234800,
+  "iat": 1642231200  
+}
+```
+
+**Usage**: Include as `Authorization: Bearer <base64-token>`
+
+---
+
+# 🐳 Deployment
+
+## Docker Setup
+```bash
+# Build and run with Docker
+docker build -t orpheus-backend .
+docker run -p 3000:3000 -v ./data:/app/data orpheus-backend
+
+# Or use Docker Compose for full stack
+docker-compose up
+```
+
+## Production Deployment
+1. **Backend**: Deploy Rust binary with persistent storage
+2. **Frontend**: Build static assets and deploy to CDN
+3. **Configuration**: Set production environment variables
+
+---
+
+# 🧪 Development & Testing
+
+## Backend Testing
+```bash
+# Test all API endpoints
+./test-api.ps1
+
+# Run with debug logging
+RUST_LOG=debug cargo run
+```
+
+## Frontend Development
+```bash
+# Start with hot reload
+npm run dev
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
+```
+
+---
+
+# 🎯 Hackathon Features
+
+## ✅ Implemented
+- 🔐 **ICP Authentication** - Blockchain user identity
+- 📊 **Project Management** - Create and track collaborations  
+- 💰 **Revenue Splits** - Automatic validation (must sum to 100%)
+- 📁 **File Upload** - MP3 sharing with unique naming
+- 💾 **Persistent Storage** - JSON file storage with in-memory cache
+- 🌐 **CORS Support** - Frontend-backend communication
+- 🎨 **Modern UI** - shadcn/ui components with Tailwind
+
+## 🔄 Future Enhancements
+- Smart contract integration for automatic payments
+- Real-time collaboration with WebSockets  
+- Advanced audio editing capabilities
+- Mobile app with React Native
+- Integration with music streaming platforms
+
+---
+
+# 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test both frontend and backend
+5. Submit a pull request
+
+---
+
+# 📝 License
+
+MIT License - Perfect for open source music collaboration!
+
+---
+
+**Built with ❤️ for the future of decentralized music creation** 🎶⛓️
+
+*Ready for hackathon deployment and beyond!* 🚀
