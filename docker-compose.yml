@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RUST_LOG=rust_backend=debug,tower_http=debug
+    volumes:
+      - .:/app
+    working_dir: /app
+    
+  # Uncomment this section when you want to add PostgreSQL
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: rust_backend
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+# volumes:
+#   postgres_data:
