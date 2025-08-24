@@ -66,3 +66,9 @@ Thumbs.db
 *.dll
 *.so
 *.dylib
+
+# ===== INTERNET COMPUTER (ICP) =====
+# DFX local network and canister data
+.dfx/
+target/
+src/*.did

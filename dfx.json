@@ -1,0 +1,21 @@
+{
+  "canisters": {
+    "orpheus_backend": {
+      "candid": "src/orpheus_backend/orpheus_backend.did",
+      "package": "orpheus_backend",
+      "type": "rust"
+    },
+    "orpheus_frontend": {
+      "type": "assets",
+      "source": ["./dist"]
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

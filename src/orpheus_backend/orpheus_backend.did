@@ -1,0 +1,27 @@
+type Project = record {
+  id : text;
+  name : text;
+  owner_principal : principal;
+};
+
+type CreateProjectRequest = record {
+  name : text;
+};
+
+type CreateProjectResponse = record {
+  success : bool;
+  project_id : opt text;
+  error : opt text;
+};
+
+type ListProjectsResponse = record {
+  success : bool;
+  projects : vec Project;
+  error : opt text;
+};
+
+service : {
+  "whoami" : () -> (principal) query;
+  "create_project" : (CreateProjectRequest) -> (CreateProjectResponse);
+  "list_projects" : () -> (ListProjectsResponse) query;
+};

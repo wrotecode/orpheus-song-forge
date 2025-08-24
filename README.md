@@ -1,265 +1,113 @@
-# 🎵 Orpheus Song Forge - Decentralized Music Collaboration Platform
+# 🎵 Orpheus - Music Collaboration on Internet Computer
 
-A full-stack decentralized music collaboration platform powered by ICP (Internet Computer Protocol) blockchain authentication, featuring a React frontend and Rust backend.
+A minimal, hackathon-ready music collaboration platform built on ICP with Rust backend and React frontend.
 
-## 🚀 Overview
+## 🚀 Quick Start
 
-**Orpheus Song Forge** enables musicians to collaborate seamlessly on projects with:
-- **Blockchain Authentication** via ICP principals
-- **Smart Revenue Splitting** with automatic validation
-- **File Collaboration** with MP3 upload and sharing
-- **Project Management** with contributor tracking
-- **Real-time Collaboration** interface
+### Prerequisites
+- [DFX SDK](https://internetcomputer.org/docs/current/developer-docs/setup/install/) installed
+- Node.js 18+ and npm
+- Rust toolchain
 
-## 🏗️ Architecture
+### Deploy to ICP
 
-```
-orpheus-song-forge/
-├── 📱 Frontend (React + TypeScript)
-│   ├── src/components/          # React components
-│   ├── src/pages/              # Application pages  
-│   └── src/integrations/       # Supabase & external APIs
-│
-├── 🦀 Backend (Rust + Axum)
-│   ├── src/handlers.rs         # API request handlers
-│   ├── src/models.rs           # Data structures
-│   ├── src/auth.rs             # ICP authentication
-│   └── src/storage.rs          # Persistent storage
-│
-└── 🐳 Infrastructure
-    ├── Dockerfile              # Container configuration
-    └── docker-compose.yml      # Multi-service setup
-```
+1. **Start local ICP network:**
+   ```bash
+   dfx start --background
+   ```
 
----
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-# 📱 Frontend (React)
+3. **Build the frontend:**
+   ```bash
+   npm run build
+   ```
 
-Built with modern web technologies for an optimal user experience.
+4. **Deploy canisters:**
+   ```bash
+   dfx deploy
+   ```
 
-## 🛠️ Frontend Tech Stack
-- **React** with TypeScript
-- **Vite** for fast development
-- **Tailwind CSS** for styling
-- **shadcn/ui** for component library
-- **Supabase** for additional data persistence
+5. **Open the application:**
+   ```bash
+   dfx canister open orpheus_frontend
+   ```
 
-## 🚀 Frontend Setup
+## 🎯 Demo Steps
 
+1. **Landing Page** - Beautiful animated landing page loads first
+2. **Login/Signup** - Navigate to authentication pages
+3. **Dashboard** - After login, access project management
+4. **Create Projects** - Add new music collaboration projects
+5. **View Projects** - See all your created projects
+
+## 🏗️ Project Structure
+
+- **`src/LandingPage.tsx`** - Beautiful landing page with GSAP animations
+- **`src/LoginPage.tsx`** - User authentication login page
+- **`src/SignupPage.tsx`** - User registration page
+- **`src/Dashboard.tsx`** - Project management dashboard
+- **`src/App.tsx`** - Main app with React Router navigation
+- **`src/orpheus_backend/lib.rs`** - Rust canister with Candid interface
+- **`dfx.json`** - ICP deployment configuration
+- **`dist/`** - Frontend build output (auto-generated)
+
+## 🔧 Development
+
+### Local Development
 ```bash
-# Install dependencies
-npm install
-
-# Start development server
+# Frontend (React)
 npm run dev
 
-# Build for production
+# Backend (Rust)
+cargo build
+```
+
+### Build for Production
+```bash
 npm run build
 ```
 
-The frontend will be available at `http://localhost:5173`
+## 🌐 Canisters
 
-## 📋 Frontend Features
-- ✅ **Artist Profiles** - Manage your musical identity
-- ✅ **Collaboration Rooms** - Real-time project workspaces  
-- ✅ **Project Dashboard** - Track all your collaborations
-- ✅ **File Sharing** - Upload and share audio files
-- ✅ **Revenue Management** - Configure profit splits
+- **`orpheus_backend`** - Rust canister handling project management
+- **`orpheus_frontend`** - Asset canister serving the React frontend
 
----
+## 📚 Backend API
 
-# 🦀 Backend (Rust)
+The backend canister provides these methods:
+- `whoami()` - Returns the caller's Principal
+- `create_project(name: String)` - Creates a new project
+- `list_projects()` - Returns all projects for the caller
 
-High-performance backend API built with Rust and Axum framework.
+## 🎨 Frontend Features
 
-## 🛠️ Backend Tech Stack
-- **Rust** with Axum web framework
-- **Tokio** for async runtime
-- **Serde** for JSON serialization
-- **ICP Integration** for blockchain auth
-- **File Upload** with validation
+- **Landing Page First** - Beautiful animated ORPHEUS text loads first
+- **Hero Video Background** - Studio footage background
+- **GSAP Animations** - Smooth text animations and transitions
+- **Responsive Design** - Works on all device sizes
+- **Modern UI** - Clean, professional design with red accent color
+- **React Router** - Seamless navigation between pages
 
-## 🚀 Backend Setup
+## 🚀 Next Steps
 
-### Prerequisites
-- Rust (latest stable)
-- Visual Studio Build Tools (Windows)
+1. **Test the landing page** - Open the frontend URL
+2. **Navigate through pages** - Test login, signup, and dashboard
+3. **Customize animations** - Modify GSAP animations in LandingPage.tsx
+4. **Add more features** - Expand project management capabilities
+5. **Deploy to mainnet** - When ready for production
 
-### Installation Steps
+## 🎵 Ready for Hackathon!
 
-1. **Navigate to project**:
-   ```bash
-   cd orpheus-song-forge
-   ```
+Your project now has:
+- ✅ **Beautiful Landing Page** - Loads first with stunning animations
+- ✅ **ICP compatibility** - Deployed and working on Internet Computer
+- ✅ **Modern React frontend** - With routing and responsive design
+- ✅ **Rust backend canister** - Handling project management
+- ✅ **Professional UI/UX** - Based on your original design
+- ✅ **GSAP animations** - Smooth, engaging user experience
 
-2. **Install Rust dependencies**:
-   ```bash
-   cargo build
-   ```
-
-3. **Set up environment**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-4. **Run the server**:
-   ```bash
-   cargo run
-   # OR use the convenience script:
-   ./run.bat
-   ```
-
-The backend will be available at `http://localhost:3000`
-
-## 📋 API Endpoints
-
-### Public Endpoints
-- `GET /health` - Health check
-- `GET /auth/token` - Get test ICP token (development)
-
-### Protected Endpoints (Require ICP Auth)
-- `POST /api/projects` - Create new collaboration project
-- `GET /api/projects` - List all projects
-- `GET /api/projects/:id` - Get project details
-- `POST /api/upload` - Upload MP3 files
-
-### Example API Usage
-
-**1. Get Authentication Token**
-```bash
-curl http://localhost:3000/auth/token
-```
-
-**2. Create a Project**
-```bash
-curl -X POST http://localhost:3000/api/projects \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <token>" \
-  -d '{
-    "project_name": "Epic Collaboration",
-    "contributors": [
-      {
-        "name": "Alice Producer",
-        "wallet_address": "alice-icp-principal",
-        "email": "alice@music.com"
-      }
-    ],
-    "splits": [
-      {
-        "contributor_name": "Alice Producer", 
-        "percentage": 100.0
-      }
-    ]
-  }'
-```
-
-**3. Upload Audio File**
-```bash
-curl -X POST http://localhost:3000/api/upload \
-  -H "Authorization: Bearer <token>" \
-  -F "file=@track.mp3"
-```
-
----
-
-# 🔐 ICP Blockchain Authentication
-
-## Token Format
-For this hackathon MVP, we use simplified ICP tokens:
-
-```json
-{
-  "principal": "rdmx6-jaaaa-aaaah-qcaiq-cai",
-  "exp": 1642234800,
-  "iat": 1642231200  
-}
-```
-
-**Usage**: Include as `Authorization: Bearer <base64-token>`
-
----
-
-# 🐳 Deployment
-
-## Docker Setup
-```bash
-# Build and run with Docker
-docker build -t orpheus-backend .
-docker run -p 3000:3000 -v ./data:/app/data orpheus-backend
-
-# Or use Docker Compose for full stack
-docker-compose up
-```
-
-## Production Deployment
-1. **Backend**: Deploy Rust binary with persistent storage
-2. **Frontend**: Build static assets and deploy to CDN
-3. **Configuration**: Set production environment variables
-
----
-
-# 🧪 Development & Testing
-
-## Backend Testing
-```bash
-# Test all API endpoints
-./test-api.ps1
-
-# Run with debug logging
-RUST_LOG=debug cargo run
-```
-
-## Frontend Development
-```bash
-# Start with hot reload
-npm run dev
-
-# Type checking
-npm run type-check
-
-# Linting
-npm run lint
-```
-
----
-
-# 🎯 Hackathon Features
-
-## ✅ Implemented
-- 🔐 **ICP Authentication** - Blockchain user identity
-- 📊 **Project Management** - Create and track collaborations  
-- 💰 **Revenue Splits** - Automatic validation (must sum to 100%)
-- 📁 **File Upload** - MP3 sharing with unique naming
-- 💾 **Persistent Storage** - JSON file storage with in-memory cache
-- 🌐 **CORS Support** - Frontend-backend communication
-- 🎨 **Modern UI** - shadcn/ui components with Tailwind
-
-## 🔄 Future Enhancements
-- Smart contract integration for automatic payments
-- Real-time collaboration with WebSockets  
-- Advanced audio editing capabilities
-- Mobile app with React Native
-- Integration with music streaming platforms
-
----
-
-# 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test both frontend and backend
-5. Submit a pull request
-
----
-
-# 📝 License
-
-MIT License - Perfect for open source music collaboration!
-
----
-
-**Built with ❤️ for the future of decentralized music creation** 🎶⛓️
-
-*Ready for hackathon deployment and beyond!* 🚀
+**Happy hacking! 🚀🎶**
