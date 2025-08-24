@@ -1,6 +1,6 @@
 # 🎵 Orpheus - Music Collaboration on Internet Computer
 
-A minimal, hackathon-ready music collaboration platform built on ICP with Rust backend and React frontend.
+A minimal, music collaboration platform built on ICP with Rust backend and React frontend.
 
 ## 🚀 Quick Start
 
@@ -92,22 +92,3 @@ The backend canister provides these methods:
 - **Modern UI** - Clean, professional design with red accent color
 - **React Router** - Seamless navigation between pages
 
-## 🚀 Next Steps
-
-1. **Test the landing page** - Open the frontend URL
-2. **Navigate through pages** - Test login, signup, and dashboard
-3. **Customize animations** - Modify GSAP animations in LandingPage.tsx
-4. **Add more features** - Expand project management capabilities
-5. **Deploy to mainnet** - When ready for production
-
-## 🎵 Ready for Hackathon!
-
-Your project now has:
-- ✅ **Beautiful Landing Page** - Loads first with stunning animations
-- ✅ **ICP compatibility** - Deployed and working on Internet Computer
-- ✅ **Modern React frontend** - With routing and responsive design
-- ✅ **Rust backend canister** - Handling project management
-- ✅ **Professional UI/UX** - Based on your original design
-- ✅ **GSAP animations** - Smooth, engaging user experience
-
-**Happy hacking! 🚀🎶**
